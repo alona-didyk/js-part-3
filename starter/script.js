@@ -24,6 +24,8 @@ console.log(document.querySelector('.message').textContent);
 // event is something that happens on the page
 // with event listener we can can wait for something to happen and then react to this
 
+const number = Math.trunc(Math.random() * 20) + 1;
+
 // first specify the event and then tell what to do through the function(event handler)
 document.querySelector('.check').addEventListener('click', function () {
   const guess = Number(document.querySelector('.guess').value);
