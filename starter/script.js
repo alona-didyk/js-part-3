@@ -36,3 +36,16 @@
 // optimisation - the code is optimised and recompiled during the already running programm execution
 
 // runtime in the browser - container including all the things that we need to use js. Engine, WEB API, callback queue(all the callback functions that are ready to be executed) are required
+
+// - in execution phase global execution context(abstract concept; environment in which a piece of js is executed, stores all the necessary information for some code to be executed) is created for the top-level code(code that is not inside any function). there is only one global execution context - default context, created for code that is not inside any function
+// - execution of top-level code(inside global EC)
+// - execution of functions and waiting for callbacks. One execution context per function: for ezch function call, a new execution context is created
+// all together make the call stack
+
+// Inside execution context:
+// - variable environment(let, const, var, functions, arguments objects)
+// - scope chain(consists of references to variables that are located outside of the current function)
+// - this keyword
+// NOT IN ARROW FUNCTIONS
+
+// Callstack - a place where execution contexts get stacked on top of each other in order to keep track of where we a in a programm execution. It makes sure that the order of executions never gets lost
