@@ -4,7 +4,7 @@
 
 // garbage collection - engine inside js which automatically removes old unused objects from comp memory
 
-// interpreted - comp processer only undrstand zero and ones(machine code)
+// interpreted - comp processer only understand zero and ones(machine code)
 
 // multi-paradigm - js does all three
 // paradigm is an approach and an overall mindset of structuring our code, which will ultimately direct the coding style and technique in a project that uses certain paradigm
@@ -39,7 +39,7 @@
 
 // - in execution phase global execution context(abstract concept; environment in which a piece of js is executed, stores all the necessary information for some code to be executed) is created for the top-level code(code that is not inside any function). there is only one global execution context - default context, created for code that is not inside any function
 // - execution of top-level code(inside global EC)
-// - execution of functions and waiting for callbacks. One execution context per function: for ezch function call, a new execution context is created
+// - execution of functions and waiting for callbacks. One execution context per function: for each function call, a new execution context is created
 // all together make the call stack
 
 // Inside execution context:
