@@ -1,38 +1,88 @@
-'use strict';
+// Data Structures, Modern Operators and Strings
+// Coding Challenge #1
+// We're building a football betting app (soccer for my American friends 😅)!
+// Suppose we get data from a web service about a certain game ('game' variable on next page). In this challenge we're gonna work with that data.
+// Your tasks:
+// 1. Createoneplayerarrayforeachteam(variables'players1'and 'players2')
+// 2. Thefirstplayerinanyplayerarrayisthegoalkeeperandtheothersarefield players. For Bayern Munich (team 1) create one variable ('gk') with the goalkeeper's name, and one array ('fieldPlayers') with all the remaining 10 field players
+// 3. Createanarray'allPlayers'containingallplayersofbothteams(22 players)
+// 4. Duringthegame,BayernMunich(team1)used3substituteplayers.Socreatea new array ('players1Final') containing all the original team1 players plus 'Thiago', 'Coutinho' and 'Perisic'
+// 5. Basedonthegame.oddsobject,createonevariableforeachodd(called 'team1', 'draw' and 'team2')
+// 6. Writeafunction('printGoals')thatreceivesanarbitrarynumberofplayer names (not an array) and prints each of them to the console, along with the number of goals that were scored in total (number of player names passed in)
+// 7. Theteamwiththeloweroddismorelikelytowin.Printtotheconsolewhich team is more likely to win, without using an if/else statement or the ternary operator.
+// Test data for 6.: First, use players 'Davies', 'Muller', 'Lewandowski' and 'Kimmich'. Then, call the function again with players from game.scored
+// GOOD LUCK 😀
 
-console.log(document.querySelector('.message').textContent);
+const game = {
+  team1: 'Bayern Munich',
+  team2: 'Borrussia Dortmund',
+  players: [
+    [
+      'Neuer',
+      'Pavard',
+      'Martinez',
+      'Alaba',
+      'Davies',
+      'Kimmich',
+      'Goretzka',
+      'Coman',
+      'Muller',
+      'Gnarby',
+      'Lewandowski',
+    ],
+    [
+      'Burki',
+      'Schulz',
+      'Hummels',
+      'Akanji',
+      'Hakimi',
+      'Weigl',
+      'Witsel',
+      'Hazard',
+      'Brandt',
+      'Sancho',
+      'Gotze',
+    ],
+  ],
+  score: '4:0',
+  scored: ['Lewandowski', 'Gnarby', 'Lewandowski', 'Hummels'],
+  date: 'Nov 9th, 2037',
+  odds: {
+    team1: 1.33,
+    x: 3.25,
+    team2: 6.5,
+  },
+};
 
-// DOM document object model - structured representation of HTML documents. Allows js to access HTML elements and styles to manipulate them
-// Document is an entry point to them
-// HTML element is a root element
+// 1)
+const [player1, player2] = game.players;
+console.log(player1, player2);
 
-// DOM IS NOT PART OF THE JS, ITS PART OF WEB API`S(APLICATION PROGRAMMING INTERFACE) - ITS A LIBRARYS (ALSO WRITEN IN JS) THAT BROWSER IMPLEMENT AND WE CAN ACCESS THEM USING JS
+// 2)
+const [gk, ...fieldPlayers] = player1;
+console.log(gk, fieldPlayers);
 
-// to get text content
-// mostly used with div, span, p
-// contains the plain text content of the element, including all child nodes
-// document.querySelector('.message').textContent = 'Correct number!';
-// document.querySelector('.number').textContent = 13;
-// document.querySelector('.score').textContent = 20;
+// 3)
+const allPlayers = [...player1, ...player2];
+console.log(allPlayers);
 
-// // to get value
-// // mostly used with input, textarea,select
-// // reprsents the value entered or selected by the user in a form element
-// document.querySelector('.guess').value = 23;
-// console.log(document.querySelector('.guess').value);
+// 4)
+const players1Final = [...player1, 'Thiago', 'Coutinho', 'Perisic'];
+console.log(players1Final);
 
-// event is something that happens on the page
-// with event listener we can can wait for something to happen and then react to this
+// 5)
+const {
+  odds: { team1, x: draw, team2 },
+} = game;
+console.log(team1, draw, team2);
 
-const number = Math.trunc(Math.random() * 20) + 1;
+// 6)
+const printGoals = function (...players) {
+  console.log(`${players.length} goals were scored`);
+};
+printGoals('Davies', 'Muller', 'Lewandowski', 'Kimmich');
+printGoals(...game.scored);
 
-// first specify the event and then tell what to do through the function(event handler)
-document.querySelector('.check').addEventListener('click', function () {
-  const guess = Number(document.querySelector('.guess').value);
-  //   document.querySelector('.message').textContent = 'Correct number!';
-  console.log(guess, typeof guess);
-
-  if (!guess) {
-    document.querySelector('.message').textContent = 'No number!';
-  }
-});
+// 7)
+team1 < team2 && console.log('team one is more likely to win');
+team1 > team2 && console.log('team one is more likely to win');
