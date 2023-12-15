@@ -4,7 +4,25 @@
 const flights =
   '_Delayed_Departure;fao93766109;txl2133758440;11:25+_Arrival;bru0943384722;fao93766109;11:45+_Delayed_Arrival;hel7439299980;fao93766109;12:05+_Departure;fao93766109;lis2323639855;12:30';
 
+// compute (calculate) property names instead of having writing out them manually or literally ([weekdays[...]])
+const weekdays = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+const hours = {
+  [weekdays[3]]: {
+    open: 12,
+    close: 22,
+  },
+  [weekdays[4]]: {
+    open: 11,
+    close: 23,
+  },
+  [weekdays[5]]: {
+    open: 0, // Open 24 hours
+    close: 24,
+  },
+};
+
 // Data needed for first part of the section
+// this object is written using object literal syntax {}
 const restaurant = {
   name: 'Classico Italiano',
   location: 'Via Angelo Tavanti 23, Firenze, Italy',
@@ -12,21 +30,15 @@ const restaurant = {
   starterMenu: ['Focaccia', 'Bruschetta', 'Garlic Bread', 'Caprese Salad'],
   mainMenu: ['Pizza', 'Pasta', 'Risotto'],
 
-  openingHours: {
-    thu: {
-      open: 12,
-      close: 22,
-    },
-    fri: {
-      open: 11,
-      close: 23,
-    },
-    sat: {
-      open: 0, // Open 24 hours
-      close: 24,
-    },
-  },
-  order: function (starterIndex, mainIndex) {
+  // 1) ES6 enhanced object literals
+  hours,
+
+  // order: function (starterIndex, mainIndex) {
+  //   return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
+  // },
+
+  // 2) functions (methods)
+  order(starterIndex, mainIndex) {
     return [this.starterMenu[starterIndex], this.mainMenu[mainIndex]];
   },
 
@@ -51,17 +63,90 @@ const restaurant = {
   },
 };
 
-// LOGICAL ASSIGNMENT OPERATOR
-const rest1 = {
-  name: 'Capri',
-  // numGuests: 20,
-  numGuests: 0,
-};
+// OPTIONAL CHAINING ?.
 
-const rest2 = {
-  name: 'La Piazza',
-  owner: 'Giovani Rossi',
-};
+// if (restaurant.hours && restaurant.hours.mon)
+//   console.log(restaurant.hours.mon.open);
+// if (restaurant.hours.fri) console.log(restaurant.hours.fri.open);
+
+// WITH optional chaining
+// if property before ?. exists then the next property will be read; if not undefined will be returned
+// console.log(restaurant.hours.mon?.open);
+// console.log(restaurant.hours?.mon?.open);
+
+// example
+
+// const days = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
+
+// for (const day of days) {
+// console.log(day);
+// if we want to use a variable name as the property name, use []
+// const open = restaurant.hours[day]?.open ?? 'closed';
+// console.log(`On ${day}, we open at ${open}`);
+// }
+
+// Methods
+// console.log(restaurant.order?.(0, 1) ?? 'Method does not exist');
+// console.log(restaurant.orderRisotto?.(0, 1) ?? 'Method does not exist');
+
+// Arrays
+// const user = [{ name: 'Jonas', email: 'hello@jonas.io' }];
+// console.log(user[0]?.name ?? 'User array empty');
+
+// if (user.length > 0) console.log(user[0].name);
+// else console.log('User array empty');
+
+// LOOPING OBJECTS: OBJECT KEYS, VALUES AND ENTRIES
+
+// Property NAMES
+// const properties = Object.keys(hours);
+// console.log(properties);
+
+// to calculate how many properties are in object
+// let openStr = `We are open on ${properties.length} days: `;
+
+// for (const day of Object.keys(hours)) {
+//   openStr += `${day}, `;
+// }
+// console.log(openStr);
+
+// Property VALUES
+// const values = Object.values(hours);
+// console.log(values);
+
+// Property ENTRIES (KEYS + VALUES)
+// const entries = Object.entries(hours);
+// console.log(entries);
+
+// for (const [key, { open, close }] of entries) {
+//   console.log(`On ${key} we open at ${open} and close at ${close}`);
+// }
+
+// LOOPING ARRAYS: THE FOR-OF LOOP
+
+// const menu = [...restaurant.starterMenu, ...restaurant.mainMenu];
+
+// this loop will automatically loop over entire array and in each iteration it will give access to the current array element
+// for (const item of menu) console.log(item);
+
+// to get index and element; entries gives a new array out of each element (2) [0,'Focaccia']
+// for (const [i, el] of menu.entries()) {
+//   console.log(`${i + 1}: ${el}`);
+// }
+
+// console.log([...menu.entries()]);
+
+// LOGICAL ASSIGNMENT OPERATOR
+// const rest1 = {
+//   name: 'Capri',
+// numGuests: 20,
+//   numGuests: 0,
+// };
+
+// const rest2 = {
+//   name: 'La Piazza',
+//   owner: 'Giovani Rossi',
+// };
 
 // rest1.numGuests = rest1.numGuests || 10;
 // rest2.numGuests = rest2.numGuests || 10;
@@ -71,17 +156,17 @@ const rest2 = {
 // rest2.numGuests ||= 10;
 
 // NULLISH ASSIGNMENT OPERATOR (null or undefined)
-rest1.numGuests ??= 10;
-rest2.numGuests ??= 10;
+// rest1.numGuests ??= 10;
+// rest2.numGuests ??= 10;
 
 // AND ASSIGNMENT OPERATOR
 // rest1.owner = rest1.owner && '<ANONYMOUS>';
 // rest2.owner = rest2.owner && '<ANONYMOUS>';
-rest1.owner &&= '<ANONYMOUS>';
-rest2.owner &&= '<ANONYMOUS>';
+// rest1.owner &&= '<ANONYMOUS>';
+// rest2.owner &&= '<ANONYMOUS>';
 
-console.log(rest1);
-console.log(rest2);
+// console.log(rest1);
+// console.log(rest2);
 
 // USE ANY DATA TYPE, RETURN ANY DATA TYPE, DO SHORT-CIRCUITING (IN CASE OR || OPERATOR IT MEANS IF THE FIRST VALUE IS TRUTHY VALUE IT WILL IMMEDIATELY RETURN THAT FIRST VALUE, IF ALL THE VALUES ARE FALSE IT WILL RETURN THE LAST VALUE)
 // ==== OR ====
