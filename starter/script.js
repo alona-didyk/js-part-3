@@ -373,3 +373,158 @@ const restaurant = {
 // default values
 // const [p = 1, q = 1, r = 1] = [8, 9];
 // console.log(p, q, r);
+
+// SET - A COLLECTION OF UNIQUE VALUES; NEVER HAVE A DUPLICATES; THERE IS NO KEY-VALUE PAIRS, ITS JUST A BUNCH OF VALUES GROUPED TOGETHER; ITERABLES; THE DIFFERENCE FROM AN ARRAY IS ITS VALUES ARE ALWAYS UNIQUE; THE ORDER OF THE ELEMENT IN THE SET IS IRRELEVANT(не має значення)
+
+// const orderSet = new Set([
+//   'Pasta',
+//   'Pizza',
+//   'Pizza',
+//   'Risotto',
+//   'Pasta',
+//   'Pizza',
+// ]);
+// console.log(orderSet); // Set(3) {'Pasta', 'Pizza', 'Risotto'}
+
+// console.log(new Set('Jonas')); // Set(5) {'J', 'o', 'n', 'a', 's'}
+
+// to get size of the set
+// console.log(orderSet.size); // 3
+
+// to check if a certain element is in set
+// console.log(orderSet.has('Pizza')); // true
+// console.log(orderSet.has('Bread')); // false
+
+// to add new element to a set
+// orderSet.add('Garlic Bread');
+// orderSet.add('Garlic Bread');
+// console.log(orderSet);
+
+// to delete element
+// orderSet.delete('Risotto');
+// console.log(orderSet);
+
+// THERE ARE NO INDEXES, WE CANT GET VALUES OUT OF A SET; IF ALL THE VALUES ARE UNIQUE AND THEIR ORDER DOES NOT MATTER, THERE IS NO POINT IN RETRIEVING VALUES OUT OF A SET
+
+// to delete all of the values of a set
+// orderSet.clear();
+// console.log(orderSet);
+
+// we can loop over them
+// for (const order of orderSet) {
+//   console.log(order);
+// }
+
+// THE MAIN USE OF SETS IS TO REMOVE DUPLICATE VALUES OF ARRAYS
+// const staff = ['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter'];
+
+// to convert Set to an array
+// const staffUnique = [...new Set(staff)];
+// console.log(staffUnique);
+
+// to know how many different positions there are
+// console.log(
+//   new Set(['Waiter', 'Chef', 'Waiter', 'Manager', 'Chef', 'Waiter']).size
+// );
+
+// to count how many letters are in string
+// console.log(new Set('jonas').size);
+
+// MAP - A DATA STRUCTURE THAT WE CAN USE TO MAP VALUES TO KEYS; THE KEYS CAN BE ANY TYPE
+
+// const rest = new Map();
+
+// to fill up the map
+// set not only update the map but also returns the updated map
+// rest.set('name', 'Clasicco Italiano');
+// rest.set(1, 'Firenze, Italy');
+// console.log(rest.set(2, 'Lisbon, Portugal')); // Map(3) {'name' => 'Clasicco Italiano', 1 => 'Firenze, Italy', 2 => 'Lisbon, Portugal'}
+
+// you can chain set
+// rest
+//   .set('categories', ['Italian', 'Pizzeria', 'Vegetarian', 'Organic'])
+//   .set('open', 11)
+//   .set('close', 23)
+//   .set(true, 'We are open')
+//   .set(false, 'We are closed');
+
+// to read data from the map
+// console.log(rest.get('name'));
+// console.log(rest.get(true));
+
+// const time = 21;
+// console.log(rest.get(time > rest.get('open') && time < rest.get('close')));
+
+// to check if a map contains a certain key
+// console.log(rest.has('categories'));
+
+// to delete element from the map
+// rest.delete(2);
+// console.log(rest);
+
+// to get size of the map
+// console.log(rest.size);
+
+// to remove all the elements
+// rest.clear();
+// console.log(rest);
+
+// the use of arrays and objects as a map keys
+// const arr = [1, 2];
+// rest.set(arr, 'Test');
+// rest.set(document.querySelector('h1'), 'Heading');
+// console.log(rest);
+
+// console.log(rest.get([1, 2])) // undefined, because its not the same array, we should put [1, 2] in a variable
+// console.log(rest.get(arr));
+
+// MAPS: ITERATION
+
+// const question = new Map([
+//   ['question', 'what is the best programming language in the world?'],
+//   [1, 'C'],
+//   [2, 'Java'],
+//   [3, 'Javascript'],
+//   ['correct', 3],
+//   [true, 'Correct'],
+//   [(false, 'Try again')],
+// ]);
+
+// console.log(question);
+
+// Convert object to map
+// the same structure as calling this
+// console.log(Object.entries(hours));
+// const hoursMap = new Map(Object.entries(hours));
+// console.log(hoursMap);
+
+// Quiz app
+
+// Iteration
+// console.log(question.get('question'));
+// for (const [key, value] of question) {
+//   if (typeof key === 'number') {
+//     console.log(`${key}: ${value}`);
+//   }
+// }
+
+// const answer = Number(prompt('Your answer?'));
+// console.log(answer);
+
+// console.log(question.get(question.get('correct') === answer));
+
+// to convert a map back to an array
+// console.log([...question]);
+// console.log([...question.entries()]);
+// console.log([...question.keys()]);
+// console.log([...question.values()]);
+
+// WHAT TO USE
+// 1) if simple list => arrays or sets; when we do not need to describe the values
+// 2) if key/value set => objects or maps; key allows to describe a value
+
+// USE ARRAY IF YOU NEED ORDERED LIST OF VALUES(MIGHT CONTAIN DUPLICATES), WHEN YOU NEED TO MANIPULATE DATA
+// USE SETS WHEN WORKING WITH UNIQUE VALUES, WHEN YOU NEED HIGH-PERFORMANCE(SETS CAN BE FASTER THAT ARRAY), USE TO REMOVE DUPLICATES FROM ARRAY
+
+// USE OBJECTS IF YOU NEED MORE 'TRADITIONAL' KEY/VALUE STORE, EASIER TO WRITE AND ACCESS VALUES WITH . AND []; USE WHEN YOU NEED TO INCLUDE FUNCTIONS(METHODS), USE WHEN WORKING WITH JSON
+// USE MAPS IF YOU NEED BETTER PERFORMANCE(SIMPLE KEY/VALUES STORES), KEYS CAN HAVE ANY DATA TYPE, EASY TO ITERATE, EASY TO COMPUTE(CALCULATE); USE WHEN YOU SIMPLY NEED TO MAP KEY TO VALUES; USE WHEN YOU NEED KEYS THAT ARE NOT STRINGS
