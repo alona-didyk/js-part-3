@@ -1,38 +1,31 @@
 'use strict';
 
-console.log(document.querySelector('.message').textContent);
+///////////////////////////////////////
+// Modal window
 
-// DOM document object model - structured representation of HTML documents. Allows js to access HTML elements and styles to manipulate them
-// Document is an entry point to them
-// HTML element is a root element
+const modal = document.querySelector('.modal');
+const overlay = document.querySelector('.overlay');
+const btnCloseModal = document.querySelector('.btn--close-modal');
+const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 
-// DOM IS NOT PART OF THE JS, ITS PART OF WEB API`S(APLICATION PROGRAMMING INTERFACE) - ITS A LIBRARYS (ALSO WRITEN IN JS) THAT BROWSER IMPLEMENT AND WE CAN ACCESS THEM USING JS
+const openModal = function () {
+  modal.classList.remove('hidden');
+  overlay.classList.remove('hidden');
+};
 
-// to get text content
-// mostly used with div, span, p
-// contains the plain text content of the element, including all child nodes
-// document.querySelector('.message').textContent = 'Correct number!';
-// document.querySelector('.number').textContent = 13;
-// document.querySelector('.score').textContent = 20;
+const closeModal = function () {
+  modal.classList.add('hidden');
+  overlay.classList.add('hidden');
+};
 
-// // to get value
-// // mostly used with input, textarea,select
-// // reprsents the value entered or selected by the user in a form element
-// document.querySelector('.guess').value = 23;
-// console.log(document.querySelector('.guess').value);
+for (let i = 0; i < btnsOpenModal.length; i++)
+  btnsOpenModal[i].addEventListener('click', openModal);
 
-// event is something that happens on the page
-// with event listener we can can wait for something to happen and then react to this
+btnCloseModal.addEventListener('click', closeModal);
+overlay.addEventListener('click', closeModal);
 
-const number = Math.trunc(Math.random() * 20) + 1;
-
-// first specify the event and then tell what to do through the function(event handler)
-document.querySelector('.check').addEventListener('click', function () {
-  const guess = Number(document.querySelector('.guess').value);
-  //   document.querySelector('.message').textContent = 'Correct number!';
-  console.log(guess, typeof guess);
-
-  if (!guess) {
-    document.querySelector('.message').textContent = 'No number!';
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'Escape' && !modal.classList.contains('hidden')) {
+    closeModal();
   }
 });
