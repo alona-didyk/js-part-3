@@ -62,8 +62,8 @@ console.log(document.head);
 console.log(document.body);
 
 const header = document.querySelector('.header');
-const allSections = document.querySelectorAll('.section'); // returns NodeList
-console.log(allSections);
+// const allSections = document.querySelectorAll('.section'); // returns NodeList
+// console.log(allSections);
 
 document.getElementById('section--1');
 
@@ -418,9 +418,9 @@ const handleHover = function (e, opacity) {
     const logo = link.closest('.nav').querySelector('img');
 
     siblings.forEach(el => {
-      if (el !== link) el.style.opacity = opacity;
+      if (el !== link) el.style.opacity = this;
     });
-    logo.style.opacity = opacity;
+    logo.style.opacity = this;
   }
 };
 const nav = document.querySelector('.nav');
@@ -470,7 +470,7 @@ console.log(navHeight);
 
 const stickyNav = function (entries) {
   const [entry] = entries;
-  console.log(entry);
+  // console.log(entry);
 
   if (!entry.isIntersecting) nav.classList.add('sticky');
   else nav.classList.remove('sticky');
@@ -483,3 +483,189 @@ const headerObserver = new IntersectionObserver(stickyNav, {
   rootMargin: `-${navHeight}px`,
 });
 headerObserver.observe(header);
+
+// REVEALING ELEMENTS ON SCROLL
+
+const allSections = document.querySelectorAll('.section');
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  // to stop observe; pass the eleemnt which element should be unobserved
+  observer.unobserve(entry.target);
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+allSections.forEach(function (section) {
+  sectionObserver.observe(section);
+  section.classList.add('section--hidden');
+});
+
+// LAZY LOADING IMAGES
+
+// we select all images which have the property of data-src
+const imgTargets = document.querySelectorAll('img[data-src]');
+
+const loadImg = function (entries, observer) {
+  const [entry] = entries;
+  // console.log(entry);
+
+  if (!entry.isIntersecting) return;
+
+  // Replace src with data-src
+  entry.target.src = entry.target.dataset.src;
+
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+
+  observer.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(loadImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '-200px',
+});
+imgTargets.forEach(img => imgObserver.observe(img));
+
+// BUILDING A SLIDER-COMPONENT
+
+const slider = function () {
+  const slides = document.querySelectorAll('.slide');
+  const btnLeft = document.querySelector('.slider__btn--left');
+  const btnRight = document.querySelector('.slider__btn--right');
+  const dotContainer = document.querySelector('.dots');
+
+  let curSlide = 0;
+  const maxSlide = slides.length;
+
+  // const slider = document.querySelector('.slider');
+  // slider.style.transform = 'scale(0.4) translateX(-700px)';
+  // slider.style.overflow = 'visible';
+
+  // slides.forEach((s, i) => (s.style.transform = `translateX(${100 * i})`));
+  // 0%, 100%, 200%, 300%
+
+  const createDots = function () {
+    slides.forEach((_, i) => {
+      dotContainer.insertAdjacentHTML(
+        'beforeend',
+        `<button class="dots__dot" data-slide="${i}"></button>`
+      );
+    });
+  };
+
+  const activateDot = function (slide) {
+    document
+      .querySelectorAll('.dots__dot')
+      .forEach(dot => dot.classList.remove('dots__dot--active'));
+
+    document
+      .querySelector(`.dots__dot[data-slide="${slide}"]`)
+      .classList.add('dots__dot--active');
+  };
+
+  const goToSlide = function (slide) {
+    slides.forEach(
+      (s, i) => (s.style.transform = `translateX(${100 * (i - slide)}%)`)
+    );
+    // curSlide - 1: -100%, 0%, 100%, 200%
+  };
+
+  // Next slide
+  const nextSlide = function () {
+    if (curSlide === maxSlide - 1) {
+      curSlide = 0;
+    } else {
+      curSlide++;
+    }
+
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  };
+
+  const prevSlide = function () {
+    if (curSlide === 0) {
+      curSlide = maxSlide - 1;
+    } else {
+      curSlide--;
+    }
+    goToSlide(curSlide);
+    activateDot(curSlide);
+  };
+
+  const init = function () {
+    goToSlide(0);
+    createDots();
+    activateDot(0);
+  };
+  init();
+
+  // Event handlers
+  btnRight.addEventListener('click', nextSlide);
+  btnLeft.addEventListener('click', prevSlide);
+
+  document.addEventListener('keydown', function (e) {
+    console.log(e);
+    if (e.key === 'ArrowLeft') prevSlide();
+    e.key === 'ArrowRight' && nextSlide();
+  });
+
+  dotContainer.addEventListener('click', function (e) {
+    if (e.target.classList.contains('dots__dot')) {
+      const { slide } = e.target.dataset;
+      goToSlide(slide);
+      activateDot(slide);
+    }
+  });
+};
+slider();
+
+// LIFECYCLE (RIGHT FROM THE MOMENT THAT THE PAGE IS FIRST ACCESSED, UNTILL THE USER LEAVES) DOM EVENTS
+
+// DOMCONTENTLOADED - fires as soon as the HTML completely parsed; and all scripts
+// this event does not wait for images and other external resources to load, so just HTML and js need to be loaded
+document.addEventListener('DOMContentLoaded', function (e) {
+  console.log('HTML parsed and DOM tree built!', e); // HTML parsed and DOM tree built! Event {isTrusted: true, type: 'DOMContentLoaded', target: document, currentTarget: document, eventPhase: 2, …}
+});
+// if we have script at the end of HTML file, we do not need DOMContentLoaded
+
+// LOAD EVENT - is fired by the window as soon as not only HTML is parsed, but also all the images and external resources like CSS files are also loaded
+window.addEventListener('load', function (e) {
+  console.log('Page fully loaded', e); // Page fully loaded Event {isTrusted: true, type: 'load', target: document, currentTarget: Window, eventPhase: 2, …}
+});
+
+// BEFOREUNLOAD EVENT - is fired by the window and created immediately before a user is about to leave the page
+// e.g. to ask a user if they are 100% want to leave a page
+// window.addEventListener('beforeunload', function (e) {
+//   e.preventDefault();
+//   console.log(e);
+//   e.returnValue = '';
+// });
+
+// EFFICIENT SCRIPT LOADING: DEFER AND ASYNC
+
+// these attributes will influence the way the js is fetched(downloaded) and executed
+// IF SCRIPT TAG IS IN HEAD
+// regular tag - first script fetch and execute and then html and DOMContentLoaded (NEVER DO THIS)
+
+// we can add ASYNC tag to html script tag - the script is loaded at the same time as the html is parsed, however html parsing still stops for the script execution; scripts are fetched asynchronously and executed immediately
+// DOMContentLoaded usually waits for all scripts to be executed, except for async script
+// scripts are not guaranteed to execute in order
+// its good if you use 3rd-party scripts where order does not matter (e.g. Google Analytics)
+
+// (BETTER)
+// or DEFER - the script is still loaded asynchronously, but the execution of the script is deffered untill the end of the html parsing; scripts are fetched asynchronously and executed after the html is completely parsed
+// DOMContentLoaded fires after defer script is executed
+// scripts are executed in order
+
+// IF SCRIPT TAG IS IN BODY END
+// regular tag - first html parsed and then script fetch and execute and DOMContentLoaded; scripts are fetched and executed after the html is completely parsed
+// we can add ASYNC tag to html script tag - makes no sense
+// or defer - makes no sense
